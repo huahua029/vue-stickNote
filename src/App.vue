@@ -10,6 +10,7 @@ import Header from './components/Header.vue'
 import Content from './components/Content.vue'
 
 export default {
+
   name: 'app',
   components: {
     Header,
@@ -29,5 +30,11 @@ export default {
   }
   ul{
     list-style: none;
+  }
+  .icon {
+    width: 1.5em; height: 1.5em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
   }
 </style>

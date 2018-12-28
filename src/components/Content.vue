@@ -30,7 +30,7 @@
             <button class="button" @click="save">添加</button>
         </el-dialog>
 
-        <div class="note" v-for="item in array" :key="item.id">
+        <div class="note" v-for="item in array" :key="item.id" v-if="item.showIt">
             <div class="time">{{item.date.year}}年{{item.date.month}}月{{item.date.date}}日</div>
             <div class="noteContent">{{item.text}}</div>
             <el-rate
@@ -40,7 +40,7 @@
                     v-model="item.value"
             ></el-rate>
             <div class="button">
-                <button v-if="!done" @click="done=!done">
+                <button v-if="!item.done" @click="item.done = true">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-done"></use>
                     </svg>
@@ -52,20 +52,49 @@
 </template>
 
 <script>
+  import Bus from './event.js'
+
   export default {
     name: "Content",
     data() {
       return {
         dialogTableVisible: false,
-        text: '',
-        value: 0,
+        text: '一个三四',
+        value: 1,
         array: [],
         id: 0,
         done: false,
-        date: {}
+        date: {},
+        showIt: true
       }
     },
+    created() {
+      Bus.$on('done', this.doneIt)
+      Bus.$on('sort', this.sortIt)
+      Bus.$on('all', this.allShow)
+    },
     methods: {
+      allShow() {
+        this.array.forEach((current) => {
+          if (current.done === true) {
+            current.showIt = true
+          }
+        })
+      },
+      doneIt() {
+        this.array.forEach((current) => {
+          if (current.done === true) {
+            current.showIt = false
+          }
+        })
+      }
+      ,
+      sortIt() {
+        this.array.sort(function (a, b) {
+          return b.value - a.value
+        })
+      }
+      ,
       createTime: function () {
         let date = new Date()
         let time = {}
@@ -73,9 +102,10 @@
         time.month = date.getMonth() + 1
         time.date = date.getDate()
         return time
-      },
+      }
+      ,
       save: function () {
-        if (!this.value) {
+        if (!(this.text || this.value)) {
           this.$message('请输入内容');
         } else {
           let date = this.createTime()
@@ -85,6 +115,8 @@
           obj.value = this.value
           obj.id = this.id
           obj.date = this.date
+          obj.done = this.done
+          obj.showIt = this.showIt
           this.id += 1
           this.array.push(obj)
           this.dialogTableVisible = false
@@ -100,6 +132,7 @@
         padding-right: 220px;
         /*display: flex;*/
         flex-wrap: nowrap;
+
         .topAndNew {
             .top, .new {
                 width: 64px;
@@ -129,7 +162,8 @@
                 bottom: 30px;
             }
         }
-        .dialog{
+
+        .dialog {
             .block {
                 margin-top: 20px;
 
@@ -155,6 +189,7 @@
                 }
             }
         }
+
         .note {
             width: 230px;
             margin: 20px;
@@ -164,7 +199,7 @@
             flex-direction: column;
 
             .time {
-                white-space:nowrap;
+                white-space: nowrap;
                 width: 100px;
                 height: 20px;
                 font-size: 14px;
@@ -178,10 +213,12 @@
                 border-top: 1px solid #E6E6E6;
                 border-bottom: 1px solid #E6E6E6;
             }
-            .el-rate{
+
+            .el-rate {
                 padding: 10px;
             }
-            .button >button{
+
+            .button > button {
                 margin-top: 30px;
                 margin-left: 50%;
                 transform: translateX(-50%);
@@ -200,12 +237,14 @@
                 &:hover {
                     background: #00D3AA;
                 }
-                svg{
+
+                svg {
                     width: 16px;
                     height: 13px;
                     background: #00D3AA;
                 }
-                &.done{
+
+                &.done {
                     background: #15D1E8;
                     padding-left: 5px;
                     padding-right: 5px;
