@@ -30,8 +30,8 @@
             <button class="button" @click="save">添加</button>
         </el-dialog>
 
-        <div class="note" v-for="item in array" :key="item.id" v-if="item.showIt">
-            <div class="time">{{item.date.year}}年{{item.date.month}}月{{item.date.date}}日</div>
+        <div class="note" v-for="item in array" :key="item.id">
+            <!--<div class="time">{{item.date.year}}年{{item.date.month}}月{{item.date.date}}日</div>-->
             <div class="noteContent">{{item.text}}</div>
             <el-rate
                     :colors="['#15D1E8 ', '#15D1E8 ', '#15D1E8 ']"
@@ -40,7 +40,7 @@
                     v-model="item.value"
             ></el-rate>
             <div class="button">
-                <button v-if="!item.done" @click="item.done = true">
+                <button v-if="!item.finish" @click="finishChange(item.id)">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-done"></use>
                     </svg>
@@ -53,6 +53,7 @@
 
 <script>
   import Bus from './event.js'
+  import note from './helper/note'
 
   export default {
     name: "Content",
@@ -65,15 +66,30 @@
         id: 0,
         done: false,
         date: {},
-        showIt: true
+        showIt: true,
       }
     },
     created() {
       Bus.$on('done', this.doneIt)
       Bus.$on('sort', this.sortIt)
       Bus.$on('all', this.allShow)
+
+      note.getNoteList().then(
+        x=>{
+          this.array = x.data.notes
+        }
+      )
     },
     methods: {
+      finishChange(id){
+        note.editNote(id).then(
+          x=>{
+            console.log(this.array)
+            // console.log(this.$refs.button)
+            this.array[id-1].finish=true
+          }
+        )
+      },
       allShow() {
         this.array.forEach((current) => {
           if (current.done === true) {
@@ -105,6 +121,7 @@
       }
       ,
       save: function () {
+        /*
         if (!(this.text || this.value)) {
           this.$message('请输入内容');
         } else {
@@ -121,6 +138,21 @@
           this.array.push(obj)
           this.dialogTableVisible = false
         }
+        */
+        note.createNote({text:this.text,value: this.value}).then(
+          (x)=>{
+            console.log(x)
+            let obj = {}
+            obj.text = this.text
+            obj.value = this.value
+            this.array.push(obj)
+            this.$message({
+              type: 'success',
+              message: '创建成功'
+            })
+            this.dialogTableVisible = false
+          }
+        )
       }
     }
   }
