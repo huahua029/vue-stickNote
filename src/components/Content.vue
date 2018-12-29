@@ -30,8 +30,13 @@
             <button class="button" @click="save">添加</button>
         </el-dialog>
 
-        <div class="note" v-for="item in array" :key="item.id">
-            <!--<div class="time">{{item.date.year}}年{{item.date.month}}月{{item.date.date}}日</div>-->
+        <div class="note" v-for="item in array" :key="item.id" ref="note">
+            <div class="time">
+                {{ item.updatedAt | formatDate}}
+                <svg class="icon" aria-hidden="true" @click="deleteNote($event,item.id)">
+                    <use xlink:href="#icon-close"></use>
+                </svg>
+            </div>
             <el-input
                     type="textarea"
                     :rows="6"
@@ -74,6 +79,16 @@
         showIt: true,
       }
     },
+    filters: {
+      formatDate: (value) => {
+        if (!value) return ''
+        let date = new Date(value)
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let data = date.getDate()
+        return year + '年' + month + '月' + data + '日'
+      }
+    },
     created() {
       Bus.$on('done', this.doneIt)
       Bus.$on('sort', this.sortIt)
@@ -89,8 +104,7 @@
       finishChange(id) {
         note.finishNote(id).then(
           x => {
-            console.log(this.array)
-            // console.log(this.$refs.button)
+            // console.log(this.array)
             this.array[id - 1].finish = true
           }
         )
@@ -98,10 +112,23 @@
       textChange(id, text) {
         note.textChange(id, text).then(
           x => {
-            console.log(this.array)
+            // console.log(this.array)
           }
         )
       },
+      deleteNote(e, id) {
+        e.path[3].remove()
+        note.deleteNote(id).then(
+          () => {
+            this.$message({
+              type: 'success',
+              message: '删除成功'
+            })
+
+          }
+        )
+      },
+      //....
       allShow() {
         this.array.forEach((current) => {
           if (current.done === true) {
@@ -213,14 +240,22 @@
             background: #fff;
             display: inline-flex;
             flex-direction: column;
+            position: relative;
 
             .time {
                 white-space: nowrap;
-                width: 100px;
-                height: 20px;
                 font-size: 14px;
                 color: #808080;
                 padding-bottom: 10px;
+
+                svg {
+                    position: absolute;
+                    fill: #D8D8D8;
+                    width: 15px;
+                    height: 15px;
+                    right: 1em;
+                    top: 1em;
+                }
             }
 
             .el-rate {

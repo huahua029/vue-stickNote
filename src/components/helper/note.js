@@ -25,6 +25,9 @@ export default {
   },
   textChange(id,text){
     return axios.post(URL.EDIT,qs.stringify({id,text}))
+  },
+  deleteNote(id){
+    return axios.post(URL.DELETE,qs.stringify({id: id}))
   }
   // createNote({ title = '', description = '', content = '' } = { title: '', description: '', content: '' }) {
   //   return request(URL.CREATE, 'POST', { title, description, content })
