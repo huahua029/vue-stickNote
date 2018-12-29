@@ -30,12 +30,14 @@
             <button class="button" @click="save">添加</button>
         </el-dialog>
 
-        <div class="note" v-for="item in array" :key="item.id" ref="note">
+        <div class="note" v-for="item in array" :key="item.id" :ref="item.id">
             <div class="time">
                 {{ item.updatedAt | formatDate}}
-                <svg class="icon" aria-hidden="true" @click="deleteNote($event,item.id)">
-                    <use xlink:href="#icon-close"></use>
-                </svg>
+                <div @click="deleteNote($event,item.id)">
+                    <svg class="icon" aria-hidden="true" @click.prevent>
+                        <use xlink:href="#icon-close"></use>
+                    </svg>
+                </div>
             </div>
             <el-input
                     type="textarea"
@@ -51,7 +53,7 @@
                     v-model="item.value"
             ></el-rate>
             <div class="button">
-                <button v-if="!item.finish" @click="finishChange(item.id)">
+                <button v-if="!item.finish" @click="finishChange(item)">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#icon-done"></use>
                     </svg>
@@ -75,7 +77,6 @@
         value: 1,
         array: [],
         done: false,
-        date: {},
         showIt: true,
       }
     },
@@ -101,11 +102,15 @@
       )
     },
     methods: {
-      finishChange(id) {
-        note.finishNote(id).then(
+      finishChange(item) {
+        item.finish = true;
+        note.finishNote(item.id).then(
           x => {
-            // console.log(this.array)
-            this.array[id - 1].finish = true
+            this.$message({
+              type: 'success',
+              message: '完成～'
+            })
+
           }
         )
       },
@@ -117,14 +122,13 @@
         )
       },
       deleteNote(e, id) {
-        e.path[3].remove()
         note.deleteNote(id).then(
           () => {
+            this.$refs[id][0].remove()
             this.$message({
               type: 'success',
               message: '删除成功'
             })
-
           }
         )
       },
@@ -137,11 +141,6 @@
         })
       },
       doneIt() {
-        this.array.forEach((current) => {
-          if (current.done === true) {
-            current.showIt = false
-          }
-        })
       }
       ,
       sortIt() {
@@ -152,16 +151,17 @@
       save() {
         note.createNote({text: this.text, value: this.value}).then(
           (x) => {
-            console.log(x)
-            let obj = {}
-            obj.text = this.text
-            obj.value = this.value
-            this.array.push(obj)
             this.$message({
               type: 'success',
               message: '创建成功'
             })
             this.dialogTableVisible = false
+          }
+        ).then(
+          () => {
+            note.getNoteList().then((x) => {
+              this.array = x.data.notes
+            })
           }
         )
       }
@@ -248,14 +248,19 @@
                 color: #808080;
                 padding-bottom: 10px;
 
-                svg {
+                div {
                     position: absolute;
-                    fill: #D8D8D8;
-                    width: 15px;
-                    height: 15px;
+                    width: 20px;
+                    height: 20px;
+
                     right: 1em;
                     top: 1em;
+
+                    svg {
+                        fill: #D8D8D8;
+                    }
                 }
+
             }
 
             .el-rate {
