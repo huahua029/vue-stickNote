@@ -78,6 +78,7 @@
 
         ul > li {
             margin-right: 100px;
+            cursor: pointer;
         }
 
         .login {

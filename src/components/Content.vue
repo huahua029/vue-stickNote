@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <div class="topAndNew">
-            <div class="top">
+            <div class="top" @click="scrollTop">
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-fanhuidingbu-"></use>
                 </svg>
@@ -27,7 +27,7 @@
                 <span class="demonstration">需要星级：</span>
                 <el-rate v-model="value"></el-rate>
             </div>
-            <button class="button" @click="save">添加</button>
+            <button class="button" @click="create">添加</button>
         </el-dialog>
 
         <div class="note" v-for="item in array" :key="item.id" :ref="item.id">
@@ -76,8 +76,6 @@
         text: '一个三四',
         value: 1,
         array: [],
-        done: false,
-        showIt: true,
       }
     },
     filters: {
@@ -110,7 +108,6 @@
               type: 'success',
               message: '完成～'
             })
-
           }
         )
       },
@@ -134,13 +131,26 @@
       },
       //....
       allShow() {
-        this.array.forEach((current) => {
-          if (current.done === true) {
-            current.showIt = true
+        note.getNoteList().then(
+          x => {
+            this.array = x.data.notes
           }
-        })
+        )
       },
       doneIt() {
+        note.getNoteList().then(
+          x => {
+            let self = []
+            this.array = x.data.notes
+            this.array.map((current, index) => {
+              if(!current.finish){
+                self.push(current)
+              }
+            })
+            this.array = self
+            // console.log(this.array)
+          }
+        )
       }
       ,
       sortIt() {
@@ -148,7 +158,7 @@
           return b.value - a.value
         })
       },
-      save() {
+      create() {
         note.createNote({text: this.text, value: this.value}).then(
           (x) => {
             this.$message({
@@ -161,9 +171,13 @@
           () => {
             note.getNoteList().then((x) => {
               this.array = x.data.notes
+              console.log(this.array)
             })
           }
         )
+      },
+      scrollTop(){
+        scroll(0,0)
       }
     }
   }
