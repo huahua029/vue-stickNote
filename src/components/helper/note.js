@@ -1,14 +1,15 @@
 import axios from "axios";
 var qs = require('qs')
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = 'http://localhost:8081'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.withCredentials = false
 
 const URL = {
   NOTELIST: '/api/notes',
   CREATE: '/api/note/create',
-  UPDATA: '/api/note/edit',
+  FINISH: '/api/note/finish',
+  EDIT: '/api/note/edit',
   DELETE: '/api/note/delete'
 }
 
@@ -19,8 +20,11 @@ export default {
   createNote({text,value}){
     return axios.post(URL.CREATE,qs.stringify({text, value}))
   },
-  editNote(id){
-    return axios.post(URL.UPDATA,qs.stringify({id: id}))
+  finishNote(id){
+    return axios.post(URL.FINISH,qs.stringify({id: id}))
+  },
+  textChange(id,text){
+    return axios.post(URL.EDIT,qs.stringify({id,text}))
   }
   // createNote({ title = '', description = '', content = '' } = { title: '', description: '', content: '' }) {
   //   return request(URL.CREATE, 'POST', { title, description, content })

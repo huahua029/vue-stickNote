@@ -32,7 +32,13 @@
 
         <div class="note" v-for="item in array" :key="item.id">
             <!--<div class="time">{{item.date.year}}年{{item.date.month}}月{{item.date.date}}日</div>-->
-            <div class="noteContent">{{item.text}}</div>
+            <el-input
+                    type="textarea"
+                    :rows="6"
+                    @blur="textChange(item.id,item.text)"
+                    v-model="item.text">
+                {{item.text}}
+            </el-input>
             <el-rate
                     :colors="['#15D1E8 ', '#15D1E8 ', '#15D1E8 ']"
                     disabled-void-color="#C0C4CC"
@@ -63,7 +69,6 @@
         text: '一个三四',
         value: 1,
         array: [],
-        id: 0,
         done: false,
         date: {},
         showIt: true,
@@ -75,18 +80,25 @@
       Bus.$on('all', this.allShow)
 
       note.getNoteList().then(
-        x=>{
+        x => {
           this.array = x.data.notes
         }
       )
     },
     methods: {
-      finishChange(id){
-        note.editNote(id).then(
-          x=>{
+      finishChange(id) {
+        note.finishNote(id).then(
+          x => {
             console.log(this.array)
             // console.log(this.$refs.button)
-            this.array[id-1].finish=true
+            this.array[id - 1].finish = true
+          }
+        )
+      },
+      textChange(id, text) {
+        note.textChange(id, text).then(
+          x => {
+            console.log(this.array)
           }
         )
       },
@@ -109,38 +121,10 @@
         this.array.sort(function (a, b) {
           return b.value - a.value
         })
-      }
-      ,
-      createTime: function () {
-        let date = new Date()
-        let time = {}
-        time.year = date.getFullYear()
-        time.month = date.getMonth() + 1
-        time.date = date.getDate()
-        return time
-      }
-      ,
-      save: function () {
-        /*
-        if (!(this.text || this.value)) {
-          this.$message('请输入内容');
-        } else {
-          let date = this.createTime()
-          this.date = date
-          let obj = {}
-          obj.text = this.text
-          obj.value = this.value
-          obj.id = this.id
-          obj.date = this.date
-          obj.done = this.done
-          obj.showIt = this.showIt
-          this.id += 1
-          this.array.push(obj)
-          this.dialogTableVisible = false
-        }
-        */
-        note.createNote({text:this.text,value: this.value}).then(
-          (x)=>{
+      },
+      save() {
+        note.createNote({text: this.text, value: this.value}).then(
+          (x) => {
             console.log(x)
             let obj = {}
             obj.text = this.text
@@ -237,13 +221,6 @@
                 font-size: 14px;
                 color: #808080;
                 padding-bottom: 10px;
-            }
-
-            .noteContent {
-                padding: 10px;
-                margin-top: 10px;
-                border-top: 1px solid #E6E6E6;
-                border-bottom: 1px solid #E6E6E6;
             }
 
             .el-rate {
