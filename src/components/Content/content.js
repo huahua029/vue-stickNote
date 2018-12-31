@@ -1,0 +1,124 @@
+import eventBus from '../../helper/eventBus.js'
+import note from '../../helper/helper'
+
+export default {
+  name: "Content",
+  data() {
+    return {
+      dialogTableVisible: false,
+      text: '一个三四',
+      value: 1,
+      array: [],
+    }
+  },
+  filters: {
+    formatDate: (value) => {
+      if (!value) return ''
+      let date = new Date(value)
+      let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let data = date.getDate()
+      return year + '年' + month + '月' + data + '日'
+    }
+  },
+  created() {
+    eventBus.$on('done', this.dealNote)
+    eventBus.$on('sort', this.sortNote)
+    eventBus.$on('all', this.allShow)
+
+    note.getNoteList().then(
+      res => {
+        this.array = res.data.notes
+      }
+    )
+  },
+  methods: {
+    finishChange(item) {
+      item.finish = true;
+      note.finishNote(item._id).then(
+        () => {
+          this.$message({
+            type: 'success',
+            message: '完成任务',
+            duration: 2000,
+            center: true
+          })
+        }
+      )
+    },
+    textChange(item) {
+      note.textChange(item._id, item.text).then(
+        () => {
+          this.$message({
+            type: 'success',
+            message: '编辑成功',
+            duration: 2000,
+            center: true
+          })
+        }
+      )
+    },
+    deleteNote(e, id) {
+      note.deleteNote(id).then(
+        () => {
+          this.$refs[id][0].remove()
+          this.$message({
+            type: 'success',
+            message: '删除成功',
+            duration: 2000,
+            center: true
+          })
+        }
+      )
+    },
+    allShow() {
+      note.getNoteList().then(
+        res => {
+          this.array = res.data.notes
+        }
+      )
+    },
+    dealNote() {
+      note.getNoteList().then(
+        x => {
+          let self = []
+          this.array = x.data.notes
+          this.array.map((current, index) => {
+            if (!current.finish) {
+              self.push(current)
+            }
+          })
+          this.array = self
+        }
+      )
+    }
+    ,
+    sortNote() {
+      this.array.sort(function (a, b) {
+        return b.value - a.value
+      })
+    },
+    createNote() {
+      note.createNote({text: this.text, value: this.value}).then(
+        () => {
+          this.$message({
+            type: 'success',
+            message: '创建成功',
+            duration: 2000,
+            center: true
+          })
+          this.dialogTableVisible = false
+        }
+      ).then(
+        () => {
+          note.getNoteList().then((res) => {
+            this.array = res.data.notes
+          })
+        }
+      )
+    },
+    scrollTop() {
+      scroll(0, 0)
+    }
+  }
+}

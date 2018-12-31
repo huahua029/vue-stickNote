@@ -1,0 +1,131 @@
+.content {
+  /*padding-left: 220px;*/
+  /*padding-right: 220px;*/
+  /*display: flex;*/
+  /*justify-content: space-between;*/
+
+  .topAndNew {
+    .top, .new {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0px 10px 30px 0px rgba(0, 211, 170, 0.3);
+      position: fixed;
+      z-index: 1000;
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    .top {
+      background: #fff;
+      right: 60px;
+      bottom: 100px;
+    }
+
+    .new {
+      background: #00D3AA;
+      right: 60px;
+      bottom: 30px;
+    }
+  }
+
+  .dialog {
+    .block {
+      margin-top: 20px;
+
+      .el-rate {
+        display: inline;
+      }
+    }
+
+    .button {
+      margin-top: 30px;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      border: none;
+      border-radius: 100px;
+      width: 150px;
+      height: 45px;
+      background: #00D3AA;
+      color: #fff;
+      outline: none;
+
+      &:hover {
+        background: #00D3AA;
+      }
+    }
+  }
+
+  .note {
+    width: 230px;
+    margin: 20px;
+    padding: 20px;
+    background: #fff;
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+
+    .time {
+      white-space: nowrap;
+      font-size: 14px;
+      color: #808080;
+      padding-bottom: 10px;
+
+      div {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+
+        right: 1em;
+        top: 1em;
+
+        svg {
+          fill: #D8D8D8;
+        }
+      }
+
+    }
+
+    .el-rate {
+      padding: 10px;
+    }
+
+    .button > button {
+      margin-top: 30px;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      border: none;
+      border-radius: 100px;
+      width: 58px;
+      height: 24px;
+      background: #00D3AA;
+      color: #fff;
+      outline: none;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background: #00D3AA;
+      }
+
+      svg {
+        width: 16px;
+        height: 13px;
+        background: #00D3AA;
+      }
+
+      &.done {
+        background: #15D1E8;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    }
+  }
+}

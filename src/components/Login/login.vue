@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import note from './helper/note'
+  import helper from '../../helper/helper'
 
   export default {
     name: "register",
@@ -23,8 +23,27 @@
     },
     methods: {
       onLogin() {
-        note.loginAuth(this.username, this.password).then(
-          x => console.log(x)
+        helper.loginAuth(this.username, this.password).then(
+          (res) => {
+            if(res.status === 0){
+              this.$message({
+                type: 'success',
+                message: '登录成功'
+              })
+            }else{
+              this.$message({
+                type: 'error',
+                message: '未注册'
+              })
+            }
+
+          },
+          () => {
+            this.$message({
+              type: 'error',
+              message: '登录失败'
+            })
+          }
         )
       }
     }

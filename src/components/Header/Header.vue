@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import Bus from './event.js'
+  import eventBus from '../../helper/eventBus.js'
 
   export default {
     name: "Header",
@@ -27,15 +27,15 @@
     },
     methods: {
       all(e) {
-        Bus.$emit('all')
+        eventBus.$emit('all')
         this.style(e)
       },
       funcDone(e) {
-        Bus.$emit('done')
+        eventBus.$emit('done')
         this.style(e)
       },
       funcSort(e) {
-        Bus.$emit('sort')
+        eventBus.$emit('sort')
         this.style(e)
       },
       style(e) {

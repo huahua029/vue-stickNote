@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import note from './helper/note'
+  import helper from '../../helper/helper'
 
   export default {
     name: "register",
@@ -22,10 +22,31 @@
       }
     },
     methods: {
-      onRegister(){
-        note.registerAuth(this.username,this.password).then(
-          x=>console.log(x)
-        )
+      check() {
+        if (this.username === '' || this.password === '' || (this.password.length < 6)) {
+          return false
+        } else {
+          return true
+        }
+      },
+      onRegister() {
+        let check = this.check()
+        if (!check) {
+          this.$message({
+            type: 'error',
+            message: '请检查输入格式'
+          })
+        } else {
+          helper.registerAuth(this.username, this.password).then(
+            () => {
+              this.$message({
+                type: 'success',
+                message: '注册成功'
+              })
+              this.$router.push('/')
+            }
+          )
+        }
       }
     }
   }
@@ -38,18 +59,22 @@
         margin-top: 80px;
         margin-left: 30%;
         margin-right: 30%;
+
         .el-input {
             margin-top: 10px;
             margin-bottom: 30px;
         }
+
         .el-button {
             align-self: flex-start;
             color: #009933;
         }
+
         p {
             margin-top: 40px;
             margin-bottom: 40px;
             text-align: center;
+
             span {
                 color: #009933;
             }
