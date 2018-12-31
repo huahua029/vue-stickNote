@@ -10,7 +10,9 @@ const URL = {
   CREATE: '/api/note/create',
   FINISH: '/api/note/finish',
   EDIT: '/api/note/edit',
-  DELETE: '/api/note/delete'
+  DELETE: '/api/note/delete',
+  REGISTER: '/register',
+  LOGIN: '/login'
 }
 
 export default {
@@ -28,14 +30,11 @@ export default {
   },
   deleteNote(id){
     return axios.post(URL.DELETE,qs.stringify({id: id}))
+  },
+  registerAuth(username,password){
+    return axios.post(URL.REGISTER,qs.stringify({username,password}))
+  },
+  loginAuth(username,password){
+    return axios.post(URL.LOGIN,qs.stringify({username,password}))
   }
-  // createNote({ title = '', description = '', content = '' } = { title: '', description: '', content: '' }) {
-  //   return request(URL.CREATE, 'POST', { title, description, content })
-  // },
-  // updataBlog(blogId, { title, description, content }) {
-  //   return request(URL.UPDATA.replace(':blogId', blogId), 'PATCH', { title, description, content })
-  // },
-  // deleteBlog(blogId) {
-  //   return request(URL.DELETE.replace(":blogId", blogId), 'DELETE')
-  // }
 }

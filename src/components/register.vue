@@ -5,12 +5,14 @@
         <label>密码</label>
         <el-input v-model="password" type="password" placeholder="密码"></el-input>
 
-        <el-button>立即注册</el-button>
+        <el-button @click="onRegister">立即注册</el-button>
         <p>已有账号？<span><router-link to="/login">立即登录</router-link></span></p>
     </div>
 </template>
 
 <script>
+  import note from './helper/note'
+
   export default {
     name: "register",
     data() {
@@ -20,6 +22,11 @@
       }
     },
     methods: {
+      onRegister(){
+        note.registerAuth(this.username,this.password).then(
+          x=>console.log(x)
+        )
+      }
     }
   }
 </script>
