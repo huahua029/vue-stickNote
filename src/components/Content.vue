@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <el-header class="content">
         <div class="topAndNew">
             <div class="top" @click="scrollTop">
                 <svg class="icon" aria-hidden="true">
@@ -61,7 +61,7 @@
                 <button v-else class="done">已完成</button>
             </div>
         </div>
-    </div>
+    </el-header>
 </template>
 
 <script>
@@ -187,10 +187,10 @@
 
 <style scoped lang="scss">
     .content {
-        padding-left: 220px;
-        padding-right: 220px;
+        /*padding-left: 220px;*/
+        /*padding-right: 220px;*/
         /*display: flex;*/
-        flex-wrap: nowrap;
+        /*justify-content: space-between;*/
 
         .topAndNew {
             .top, .new {
@@ -202,7 +202,7 @@
                 border-radius: 50%;
                 box-shadow: 0px 10px 30px 0px rgba(0, 211, 170, 0.3);
                 position: fixed;
-
+                z-index: 1000;
                 svg {
                     width: 30px;
                     height: 30px;
@@ -211,13 +211,13 @@
 
             .top {
                 background: #fff;
-                right: 225px;
+                right: 60px;
                 bottom: 100px;
             }
 
             .new {
                 background: #00D3AA;
-                right: 225px;
+                right: 60px;
                 bottom: 30px;
             }
         }

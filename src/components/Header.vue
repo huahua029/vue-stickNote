@@ -1,18 +1,20 @@
 <template>
-    <div class="header">
+    <el-header height="68px" class="header">
         <div class="title"><span>Daskys</span>在线便签</div>
         <ul class="nav">
             <li class="active" @click="all">全部</li>
             <li @click="funcDone">未完成</li>
             <li @click="funcSort">排序</li>
         </ul>
-        <div class="login">
-            <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-github"></use>
-            </svg>
-            Github登录
+        <div class="loginWrapper">
+            <router-link to="register" class="register">
+                注册
+            </router-link>
+            <router-link to="login" class="login">
+                登录
+            </router-link>
         </div>
-    </div>
+    </el-header>
 </template>
 
 <script>
@@ -24,7 +26,7 @@
       return {}
     },
     methods: {
-      all(e){
+      all(e) {
         Bus.$emit('all')
         this.style(e)
       },
@@ -32,12 +34,12 @@
         Bus.$emit('done')
         this.style(e)
       },
-      funcSort(e){
+      funcSort(e) {
         Bus.$emit('sort')
         this.style(e)
       },
-      style(e){
-        e.target.parentNode.childNodes.forEach((current)=>{
+      style(e) {
+        e.target.parentNode.childNodes.forEach((current) => {
           current.classList.remove('active')
         })
         e.target.classList.add('active')
@@ -51,11 +53,8 @@
         display: flex;
         align-items: center;
         min-width: 1024px;
-        height: 85px;
         background: white;
         border-radius: 4px;
-        padding-left: 220px;
-        padding-right: 220px;
         white-space: nowrap;
 
         .title {
@@ -81,7 +80,7 @@
             cursor: pointer;
         }
 
-        .login {
+        .loginWrapper {
             display: flex;
             align-items: center;
             margin-left: auto;
@@ -89,14 +88,24 @@
             padding: 13px;
             border-radius: 100px;
             background: #00D3AA;
-            color: #fff;
             cursor: pointer;
 
-            img {
-                width: 28px;
-                height: 28px;
-                fill: white;
+            > a {
+                color: #fff;
+                text-decoration: none;
             }
+
+            .register, .login {
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+            .register{
+                border-right: 1px solid #fff;
+            }
+            .login{
+                border-left: 1px solid #fff;
+            }
+
         }
 
         .active {
