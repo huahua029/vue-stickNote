@@ -19,7 +19,7 @@
                 :visible.sync="dialogTableVisible">
             <el-input
                     type="textarea"
-                    :rows="6"
+                    row="6"
                     placeholder="请输入内容"
                     v-model="text">
             </el-input>
@@ -30,10 +30,10 @@
             <button class="button" @click="create">添加</button>
         </el-dialog>
 
-        <div class="note" v-for="item in array" :key="item.id" :ref="item.id">
+        <div class="note" v-for="item in array" :key="item._id" :ref="item._id">
             <div class="time">
-                {{ item.updatedAt | formatDate}}
-                <div @click="deleteNote($event,item.id)">
+                {{ item.createdAt | formatDate}}
+                <div @click="deleteNote($event,item._id)">
                     <svg class="icon" aria-hidden="true" @click.prevent>
                         <use xlink:href="#icon-close"></use>
                     </svg>
@@ -41,8 +41,8 @@
             </div>
             <el-input
                     type="textarea"
-                    :rows="6"
-                    @blur="textChange(item.id,item.text)"
+                    :autosize="{ minRows: 8, maxRows: 8}"
+                    @blur="textChange(item._id,item.text)"
                     v-model="item.text">
                 {{item.text}}
             </el-input>
@@ -102,7 +102,7 @@
     methods: {
       finishChange(item) {
         item.finish = true;
-        note.finishNote(item.id).then(
+        note.finishNote(item._id).then(
           x => {
             this.$message({
               type: 'success',
@@ -112,6 +112,8 @@
         )
       },
       textChange(id, text) {
+        console.log(id);
+        console.log(text);
         note.textChange(id, text).then(
           x => {
             // console.log(this.array)

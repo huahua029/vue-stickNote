@@ -90,6 +90,7 @@
             border-radius: 100px;
             background: #00D3AA;
             color: #fff;
+            cursor: pointer;
 
             img {
                 width: 28px;
