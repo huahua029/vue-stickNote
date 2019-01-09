@@ -6,7 +6,7 @@
             <li @click="funcDone">未完成</li>
             <li @click="funcSort">排序</li>
         </ul>
-        <div class="loginWrapper">
+        <div class="loginWrapper" v-if="!isLogin">
             <router-link to="register" class="register">
                 注册
             </router-link>
@@ -14,16 +14,33 @@
                 登录
             </router-link>
         </div>
+        <div class="loginWrapper" v-else>
+            <div class="register">
+                {{this.username}}
+            </div>
+            <div class="login" @click="logout">
+                注销
+            </div>
+        </div>
     </el-header>
 </template>
 
 <script>
+  import helper from '../../helper/helper.js'
   import eventBus from '../../helper/eventBus.js'
 
   export default {
     name: "Header",
     data() {
-      return {}
+      return {
+        isLogin: false,
+        username: ''
+      }
+    },
+    created() {
+      eventBus.$on('login', ()=>this.isLogin = true)
+      this.username = window.localStorage.getItem('username')
+      this.isLogin = window.localStorage.getItem('isLogin') === 'login'
     },
     methods: {
       all(e) {
@@ -43,6 +60,12 @@
           current.classList.remove('active')
         })
         e.target.classList.add('active')
+      },
+      logout() {
+        helper.logoutAuth()
+        eventBus.isLogin = false
+        this.isLogin = false
+        window.localStorage.removeItem('isLogin')
       }
     }
   }
@@ -99,10 +122,12 @@
                 padding-left: 5px;
                 padding-right: 5px;
             }
-            .register{
+
+            .register {
                 border-right: 1px solid #fff;
             }
-            .login{
+
+            .login {
                 border-left: 1px solid #fff;
             }
 

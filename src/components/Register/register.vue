@@ -12,6 +12,7 @@
 
 <script>
   import helper from '../../helper/helper'
+  import eventBus from '../../helper/eventBus.js'
 
   export default {
     name: "register",
@@ -38,12 +39,23 @@
           })
         } else {
           helper.registerAuth(this.username, this.password).then(
-            () => {
-              this.$message({
-                type: 'success',
-                message: '注册成功'
-              })
-              this.$router.push('/')
+            (res) => {
+              if (res.data.status === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '注册成功'
+                })
+                window.localStorage.setItem('username', this.username)
+                window.localStorage.setItem('isLogin', 'login')
+                eventBus.$emit('login')
+                this.$router.push('/')
+                window.location.reload()
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '已存在'
+                })
+              }
             }
           )
         }

@@ -9,6 +9,7 @@ export default {
       text: '一个三四',
       value: 1,
       array: [],
+      itemText: ''
     }
   },
   filters: {
@@ -28,7 +29,9 @@ export default {
 
     note.getNoteList().then(
       res => {
-        this.array = res.data.notes
+        if(this.array.length > 0){
+          this.array = res.data.notes
+        }
       }
     )
   },
@@ -47,16 +50,7 @@ export default {
       )
     },
     textChange(item) {
-      note.textChange(item._id, item.text).then(
-        () => {
-          this.$message({
-            type: 'success',
-            message: '编辑成功',
-            duration: 2000,
-            center: true
-          })
-        }
-      )
+      note.textChange(item._id, item.text)
     },
     deleteNote(e, id) {
       note.deleteNote(id).then(
@@ -81,14 +75,16 @@ export default {
     dealNote() {
       note.getNoteList().then(
         x => {
-          let self = []
-          this.array = x.data.notes
-          this.array.map((current, index) => {
-            if (!current.finish) {
-              self.push(current)
-            }
-          })
-          this.array = self
+          if(this.array.length > 0){
+            let self = []
+            this.array = x.data.notes
+            this.array.map((current) => {
+              if (!current.finish) {
+                self.push(current)
+              }
+            })
+            this.array = self
+          }
         }
       )
     }

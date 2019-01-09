@@ -25,15 +25,16 @@
       onLogin() {
         helper.loginAuth(this.username, this.password).then(
           (res) => {
-            if(res.status === 0){
+            if(res.data.status === 0){
               this.$message({
                 type: 'success',
                 message: '登录成功'
               })
+              this.$router.push('/')
             }else{
               this.$message({
                 type: 'error',
-                message: '未注册'
+                message: `${res.data.errorMsg}`
               })
             }
 

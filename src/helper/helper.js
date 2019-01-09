@@ -4,7 +4,7 @@ var qs = require('qs')
 
 axios.defaults.baseURL = 'http://localhost:8081'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.withCredentials = false
+axios.defaults.withCredentials = true
 
 const URL = {
   NOTELIST: '/api/notes',
@@ -13,7 +13,8 @@ const URL = {
   EDIT: '/api/note/edit',
   DELETE: '/api/note/delete',
   REGISTER: '/register',
-  LOGIN: '/login'
+  LOGIN: '/login',
+  LOGOUT: '/logout'
 }
 
 export default {
@@ -37,5 +38,8 @@ export default {
   },
   loginAuth(username, password) {
     return axios.post(URL.LOGIN, qs.stringify({username, password}))
+  },
+  logoutAuth(){
+    return axios.get(URL.LOGOUT)
   }
 }

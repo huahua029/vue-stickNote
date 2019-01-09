@@ -44,7 +44,6 @@
                     :autosize="{ minRows: 8, maxRows: 8}"
                     @blur="textChange(item)"
                     v-model="item.text">
-                {{item.text}}
             </el-input>
             <el-rate
                     :colors="['#15D1E8 ', '#15D1E8 ', '#15D1E8 ']"
