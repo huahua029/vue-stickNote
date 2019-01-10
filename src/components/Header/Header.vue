@@ -6,22 +6,6 @@
             <li @click="funcDone">未完成</li>
             <li @click="funcSort">排序</li>
         </ul>
-        <div class="loginWrapper" v-if="!isLogin">
-            <router-link to="register" class="register">
-                注册
-            </router-link>
-            <router-link to="login" class="login">
-                登录
-            </router-link>
-        </div>
-        <div class="loginWrapper" v-else>
-            <div class="register">
-                {{this.username}}
-            </div>
-            <div class="login" @click="logout">
-                注销
-            </div>
-        </div>
     </el-header>
 </template>
 
@@ -31,17 +15,6 @@
 
   export default {
     name: "Header",
-    data() {
-      return {
-        isLogin: false,
-        username: ''
-      }
-    },
-    created() {
-      eventBus.$on('login', ()=>this.isLogin = true)
-      this.username = window.localStorage.getItem('username')
-      this.isLogin = window.localStorage.getItem('isLogin') === 'login'
-    },
     methods: {
       all(e) {
         eventBus.$emit('all')
@@ -61,12 +34,6 @@
         })
         e.target.classList.add('active')
       },
-      logout() {
-        helper.logoutAuth()
-        eventBus.isLogin = false
-        this.isLogin = false
-        window.localStorage.removeItem('isLogin')
-      }
     }
   }
 </script>

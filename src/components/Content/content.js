@@ -28,10 +28,13 @@ export default {
     eventBus.$on('all', this.allShow)
 
     note.getNoteList().then(
-      res => {
-        if(this.array.length > 0){
-          this.array = res.data.notes
-        }
+      // res => {
+      //   if(this.array.length > 0){
+      //     this.array = res.data.notes
+      //   }
+      // }
+      res=>{
+        this.array = res.data.notes
       }
     )
   },
@@ -74,10 +77,10 @@ export default {
     },
     dealNote() {
       note.getNoteList().then(
-        x => {
+        req => {
           if(this.array.length > 0){
             let self = []
-            this.array = x.data.notes
+            this.array = req.data.notes
             this.array.map((current) => {
               if (!current.finish) {
                 self.push(current)

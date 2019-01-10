@@ -2,19 +2,17 @@ import axios from "axios";
 
 var qs = require('qs')
 
-axios.defaults.baseURL = 'http://localhost:8081'
+axios.defaults.baseURL = ' http://47.91.156.35:8881'
+// axios.defaults.baseURL = ' http://localhost:8081'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.withCredentials = true
 
 const URL = {
-  NOTELIST: '/api/notes',
-  CREATE: '/api/note/create',
-  FINISH: '/api/note/finish',
-  EDIT: '/api/note/edit',
-  DELETE: '/api/note/delete',
-  REGISTER: '/register',
-  LOGIN: '/login',
-  LOGOUT: '/logout'
+  NOTELIST: '/notes',
+  CREATE: '/note/create',
+  FINISH: '/note/finish',
+  EDIT: '/note/edit',
+  DELETE: '/note/delete',
 }
 
 export default {
@@ -33,13 +31,4 @@ export default {
   deleteNote(id) {
     return axios.post(URL.DELETE, qs.stringify({id: id}))
   },
-  registerAuth(username, password) {
-    return axios.post(URL.REGISTER, qs.stringify({username, password}))
-  },
-  loginAuth(username, password) {
-    return axios.post(URL.LOGIN, qs.stringify({username, password}))
-  },
-  logoutAuth(){
-    return axios.get(URL.LOGOUT)
-  }
 }
