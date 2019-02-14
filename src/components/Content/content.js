@@ -6,9 +6,9 @@ export default {
   data() {
     return {
       dialogTableVisible: false,
-      text: '一个三四',
-      value: 1,
-      array: [],
+      text: 'Daskys在线便签',
+      value: 3,
+      array: [{_id:1,text:'huahua',value: 4},{_id:2,text:'huahua',value: 4}],
       itemText: ''
     }
   },
@@ -98,6 +98,7 @@ export default {
       })
     },
     createNote() {
+      console.log('1');
       note.createNote({text: this.text, value: this.value}).then(
         () => {
           this.$message({

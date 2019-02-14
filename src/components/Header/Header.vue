@@ -10,7 +10,6 @@
 </template>
 
 <script>
-  import helper from '../../helper/helper.js'
   import eventBus from '../../helper/eventBus.js'
 
   export default {
@@ -39,6 +38,18 @@
 </script>
 
 <style lang="scss" scoped>
+    @media (max-width: 425px) {
+        .header {
+            .title {
+                width: 100%;
+            }
+
+            .nav {
+                display: none;
+            }
+        }
+    }
+
     .header {
         display: flex;
         align-items: center;

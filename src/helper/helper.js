@@ -2,10 +2,8 @@ import axios from "axios";
 
 var qs = require('qs')
 
-axios.defaults.baseURL = ' http://47.91.156.35:8881'
-// axios.defaults.baseURL = ' http://localhost:8081'
+axios.defaults.baseURL = ' http://47.91.156.35:3777'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.withCredentials = true
 
 const URL = {
   NOTELIST: '/notes',

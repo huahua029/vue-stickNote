@@ -1,5 +1,5 @@
 <template>
-    <el-header class="content">
+    <el-main class="content">
         <div class="topAndNew">
             <div class="top" @click="scrollTop">
                 <svg class="icon" aria-hidden="true">
@@ -60,7 +60,7 @@
                 <button v-else class="done">已完成</button>
             </div>
         </div>
-    </el-header>
+    </el-main>
 </template>
 
 <script src="./content.js"></script>
